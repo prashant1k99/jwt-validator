@@ -1,0 +1,36 @@
+{
+  "name": "@prashant1k99/jwt-validator",
+  "version": "0.0.1",
+  "description": "Verify JWT of any provider, like AWS Cognito, Firebase Authentication, etc..",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prashant1k99/jwt-validator.git"
+  },
+  "keywords": [
+    "JWT",
+    "AWS-Cognito",
+    "Firebase-Authentication",
+    "Auth0"
+  ],
+  "author": "Prashant Singh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/prashant1k99/jwt-validator/issues"
+  },
+  "homepage": "https://github.com/prashant1k99/jwt-validator#readme",
+  "devDependencies": {
+    "jest": "^26.6.3"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "jwk-to-pem": "^2.0.4",
+    "node-fetch": "^2.6.1"
+  }
+}
