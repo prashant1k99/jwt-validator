@@ -1,23 +1,25 @@
-class JWT_Validator {
-  #issuer
+const fetch = require('node-fetch')
 
+const fetchIssuer = (iss) => new Promise((resolve, reject) => {
+
+})
+
+class JWT_Validator {
   /**
    * 
    * @param {string} config 
+   * @param {callback} function 
    */
-  constructor(config) {
-    return new Promise((resolve, reject) => {
-      const issuerURLError = new Error('Invalid property passed on Initialization, please pass the issuer url.')
-      if(typeof config !== "string" || !config.isValid()) {
-        throw issuerURLError
-      }
-      this.#issuer = config
-    })
-  }
-
-  static init () {
-    return new Promise((resolve, reject) => {
-      // Fetch the iss from the server
-    })
+  constructor(config, callback = null) {
+    const issuerURLError = new Error('Invalid property passed on Initialization, please pass the issuer url.')
+    if(typeof config !== "string" || !config.isValid()) {
+      throw issuerURLError
+    }
+    this.issuer = config
+    if (callback && typeof(callback) === 'function') {
+      fetchIssuer(this.issuer).then((data) => {
+        return callback()
+      })
+    } else fetchIssuer(this.issuer)
   }
 }

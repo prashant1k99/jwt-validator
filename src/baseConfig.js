@@ -1,5 +1,5 @@
 class BaseConfigs {
-  isValid() {
+  get isValid() {
     return true
   }
 }
