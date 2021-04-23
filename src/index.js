@@ -1,6 +1,6 @@
-const CognitoValidator = require('./cognito')
+const CognitoValidator = require('./services/cognito')
 const jwtValidator = require('./jwtValidator')
-const FirebaseValidator = require('./firebase')
+const FirebaseValidator = require('./services/firebase')
 
 module.exports = jwtValidator
 

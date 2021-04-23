@@ -1,4 +1,4 @@
-const fetchIssuer = require('./fetchIssuer')
+const fetchIssuer = require('./utils/fetchIssuer')
 
 class JWT_Validator {
   #pemStorage = new Map()

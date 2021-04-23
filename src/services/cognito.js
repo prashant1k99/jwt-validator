@@ -1,5 +1,5 @@
-const BaseConfigs = require('./baseConfig')
-const BaseErrors = require('./baseErrors')
+const BaseConfigs = require('../utils/baseConfig')
+const BaseErrors = require('../utils/baseErrors')
 
 class CognitoValidator extends BaseConfigs {
   constructor(config) {
