@@ -23,6 +23,11 @@ class JWT_Validator {
     } else fetchIssuer(this.issuer, this.#pemStorage)
   }
 
+  /**
+   * 
+   * @param {string} token 
+   * @returns {boolean}
+   */
   isValid(token) {
     const decodedJWT = jwt.decode(token, { complete: true })
 		if (!decodedJWT) return(this.errors.INVALID_TOKEN)
@@ -30,7 +35,12 @@ class JWT_Validator {
     else return true
   }
   
-  validate() {
+  /**
+   * 
+   * @param {string} token
+   * @returns {*} Promise
+   */
+  validate(token) {
     return new Promise((resolve, reject) => {
       const decodedJWT = jwt.decode(token, { complete: true })
       if (!this.#pemStorage.has(decodedJWT.header.kid)) 
