@@ -1,4 +1,5 @@
 const fetch = require('node-fetch')
+const jwkToPem = require('jwk-to-pem')
 
 const fetchIssuer = (iss, pemStorage) => new Promise((resolve, reject) => {
   fetch(`${iss}/.well-known/jwks.json`).then(async (response) => {

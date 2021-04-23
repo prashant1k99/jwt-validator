@@ -11,27 +11,36 @@ class JWT_Validator {
    */
   constructor(config, callback = null) {
     const issuerURLError = new Error('Invalid property passed on Initialization, please pass the issuer url.')
-    if(typeof config !== "string" || !config.isValid()) {
+    if (
+      (
+        typeof config === "string" && 
+        !config.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g) 
+      ) && !config.isValid() ) {
       throw issuerURLError
     }
-    this.issuer = config.getConfig()
-    this.errors = config.getError()
+    if (typeof config === 'string') {
+      this.issues = config
+      this.errors = require('./utils/baseErrors')
+    } else {
+      this.issuer = config.getConfig()
+      this.errors = config.getError()
+    }
     if (callback && typeof(callback) === 'function') {
       fetchIssuer(this.issuer, this.#pemStorage).then(() => {
         return callback()
       })
-    } else fetchIssuer(this.issuer, this.#pemStorage)
+    } else return fetchIssuer(this.issuer, this.#pemStorage)
   }
 
   /**
    * 
    * @param {string} token 
-   * @returns {boolean}
+   * @returns 
    */
   isValid(token) {
     const decodedJWT = jwt.decode(token, { complete: true })
-		if (!decodedJWT) return(this.errors.INVALID_TOKEN)
-    else if (decodedJWT.payload.iss !== JWK_URL) return(this.errors.INVALID_ISS)
+		if (!decodedJWT) return (this.errors.INVALID_TOKEN)
+    else if (decodedJWT.payload.iss !== this.issuer) return (this.errors.INVALID_ISS)
     else return true
   }
   
