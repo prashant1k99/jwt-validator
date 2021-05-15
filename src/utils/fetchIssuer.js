@@ -1,7 +1,7 @@
 const fetch = require('node-fetch')
 const jwkToPem = require('jwk-to-pem')
 
-const fetchIssuer = (iss, pemStorage) => new Promise((resolve, reject) => {
+const fetchIssuer = (iss, pemStorage, el) => new Promise((resolve, reject) => {
   fetch(`${iss}/.well-known/jwks.json`).then(async (response) => {
     const data = await response.json()
     for (let key of data['keys']) {
@@ -14,7 +14,7 @@ const fetchIssuer = (iss, pemStorage) => new Promise((resolve, reject) => {
       })
     }
     pemStorage.set('isInit', true)
-    resolve(true)
+    resolve(true, el)
   }).catch(err => reject(err))
 })
 

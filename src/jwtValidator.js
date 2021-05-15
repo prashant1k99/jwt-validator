@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+
 const fetchIssuer = require('./utils/fetchIssuer')
 
 class JWT_Validator {
@@ -15,21 +17,29 @@ class JWT_Validator {
       (
         typeof config === "string" && 
         !config.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g) 
-      ) && !config.isValid() ) {
+      ) 
+      && !config.isValid() 
+    ) {
       throw issuerURLError
     }
+    this.config = {}
     if (typeof config === 'string') {
-      this.issues = config
+      this.config.iss = config
       this.errors = require('./utils/baseErrors')
     } else {
-      this.issuer = config.getConfig()
-      this.errors = config.getError()
+      this.config = config.getConfig
+      this.errors = config.getError
     }
+  }
+  
+  init(callback = null) {
     if (callback && typeof(callback) === 'function') {
-      fetchIssuer(this.issuer, this.#pemStorage).then(() => {
-        return callback()
+      fetchIssuer(this.config.iss, this.#pemStorage).then((data) => {
+        return callback(data, this)
+      }).catch(err => {
+        throw new Error(err)
       })
-    } else return fetchIssuer(this.issuer, this.#pemStorage)
+    } else return fetchIssuer(this.config.iss, this.#pemStorage, this)
   }
 
   /**
@@ -39,8 +49,9 @@ class JWT_Validator {
    */
   isValid(token) {
     const decodedJWT = jwt.decode(token, { complete: true })
-		if (!decodedJWT) return (this.errors.INVALID_TOKEN)
-    else if (decodedJWT.payload.iss !== this.issuer) return (this.errors.INVALID_ISS)
+		if (!decodedJWT) return (this.errors.INVALID_TOKEN())
+    else if (this.config.validator === 'COGNITO' && this.config.tokenUse && decodedJWT.payload.token_use !== this.config.tokenUse) return (this.errors.NOT_VALID_TOKEN(this.config.tokenUse))
+    else if (decodedJWT.payload.iss !== this.config.iss) return (this.errors.INVALID_ISS())
     else return true
   }
   
